@@ -21,7 +21,7 @@ app loop flow:
 """
 
 
-MIN_WAIT_TIME = 1
+MIN_WAIT_TIME = 60
 
 
 def update_usage(options):
@@ -40,15 +40,13 @@ def update_odds(options: dict):
     r = oa.fetch_odds(options)
     df = od.flat_df_from_odds(r)
     ir, ur = sdb.upsert_odds(df)
-    print(f"sports: inserted {ir} rows, updated {ur} rows")
+    print(f"odds: inserted {ir} rows, updated {ur} rows")
 
 
 def main():
     while True:
         options = o.load_options()
-
         update_usage(options)
-
         trigger = o.check_spaced_trigger(options)
 
         if trigger:
@@ -58,7 +56,6 @@ def main():
             # update_scores()
 
         update_usage(options)
-
         time.sleep(MIN_WAIT_TIME)
 
 
