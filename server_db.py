@@ -42,6 +42,9 @@ def upsert_odds(df: pl.DataFrame):
     conn = pyodbc.connect(os.environ.get("DATABASE_CONNSTR", ""))
     cursor = conn.cursor()
 
+    updated_rows = -1
+    inserted_rows = -1
+
     try:
         cursor.execute(drop_temp)
         cursor.execute(create_temp)
@@ -98,6 +101,9 @@ def upsert_sports(df: pl.DataFrame):
 
     conn = pyodbc.connect(os.environ.get("DATABASE_CONNSTR", ""))
     cursor = conn.cursor()
+
+    updated_rows = -1
+    inserted_rows = -1
 
     try:
         cursor.execute(drop_temp)
