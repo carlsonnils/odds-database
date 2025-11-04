@@ -20,8 +20,8 @@ def fetch_usage():
 
 
 def fetch_sports(options: dict) -> httpx.Response:
-    params = options.get("sports", {})
-    params.update({"apiKey": os.environ.get("ODDSAPI_KEY")})
+    params = {"apiKey": os.environ.get("ODDSAPI_KEY")}
+    params.update(options.get("sports", {}))
 
     r = httpx.get(
         HOST + "/sports",
@@ -32,8 +32,8 @@ def fetch_sports(options: dict) -> httpx.Response:
 
 
 def fetch_odds(options: dict, sport: str = "upcoming") -> httpx.Response:
-    params = options.get("odds", {})
-    params.update({"apiKey": os.environ.get("ODDSAPI_KEY")})
+    params = {"apiKey": os.environ.get("ODDSAPI_KEY")}
+    params.update(options.get("odds", {}))
 
     r = httpx.get(
         HOST + f"/sports/{sport}/odds",
