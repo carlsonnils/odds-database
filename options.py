@@ -77,3 +77,24 @@ def update_usage(opts: dict, rem: int, used: int, last: int):
     }})
     write_options(opts)
 
+
+def print_next_trigger(options: dict, usage_multi: int = 1):
+    datetime_format = "%Y-%m-%d %H:%M:%S"
+
+    last_time = datetime.strptime(
+        options.get("last_request_time", "1900-01-01 00:00:00"),
+        datetime_format,
+    )
+    ts = datetime.today() - last_time
+
+    usage = options.get("usage", {})
+    remaining = usage.get("remaining", 0)
+
+    if remaining == 0:
+        print("No more requests remaining this month")
+        return
+
+    interval = (month_end(last_time) - last_time).total_seconds() / (remaining * usage_multi) 
+
+    time_to = timedelta(seconds=interval) - ts
+    print("trigger in:", time_to)

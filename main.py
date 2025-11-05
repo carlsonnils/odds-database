@@ -54,6 +54,7 @@ def main():
             update_sports(options)
             # update_events()
             # update_scores()
+            o.print_next_trigger(options)
 
         update_usage(options)
         time.sleep(MIN_WAIT_TIME)
