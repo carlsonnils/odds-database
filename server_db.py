@@ -19,11 +19,11 @@ def upsert_odds(df: pl.DataFrame):
     JOIN temp_odds t ON o.game_id = t.game_id 
         AND o.sport_key = t.sport_key 
         AND o.book_key = t.book_key 
+        AND o.last_update_book = t.last_update_book
         AND o.market_key = t.market_key 
+        AND o.last_update_market = t.last_update_market
         AND o.team_name = t.team_name
-    SET o.last_update_book = t.last_update_book,
-        o.last_update_market = t.last_update_market,
-        o.price = t.price
+    SET o.price = t.price
     """
 
     insert_new = """
@@ -34,7 +34,9 @@ def upsert_odds(df: pl.DataFrame):
         WHERE o.game_id = t.game_id 
         AND o.sport_key = t.sport_key 
         AND o.book_key = t.book_key 
+        AND o.last_update_book = t.last_update_book
         AND o.market_key = t.market_key 
+        AND o.last_update_market = t.last_update_market
         AND o.team_name = t.team_name
     )
     """
@@ -56,6 +58,9 @@ def upsert_odds(df: pl.DataFrame):
 
         cursor.execute(insert_new)
         inserted_rows = cursor.rowcount
+        conn.commit()
+
+        cursor.execute(drop_temp)
         conn.commit()
 
     except Exception as e:
@@ -116,7 +121,9 @@ def upsert_sports(df: pl.DataFrame):
 
         cursor.execute(insert_new)
         inserted_rows = cursor.rowcount
+        conn.commit()
 
+        cursor.execute(drop_temp)
         conn.commit()
 
     except Exception as e:
