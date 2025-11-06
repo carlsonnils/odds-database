@@ -71,7 +71,7 @@ def upsert_odds(df: pl.DataFrame):
         cursor.close()
         conn.close()
 
-    return updated_rows, inserted_rows
+    return inserted_rows, updated_rows
 
 
 def upsert_sports(df: pl.DataFrame):
