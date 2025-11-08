@@ -1,7 +1,11 @@
 import os
 from datetime import datetime, timedelta
+import logging
 
 import toml
+
+
+logger = logging.getLogger(__name__)
 
 
 FILE_NAME = "request_options.toml"
@@ -91,10 +95,10 @@ def print_next_trigger(options: dict, usage_multi: int = 1):
     remaining = usage.get("remaining", 0)
 
     if remaining == 0:
-        print("No more requests remaining this month")
+        logger.info("No more requests remaining this month")
         return
 
     interval = (month_end(last_time) - last_time).total_seconds() / (remaining * usage_multi) 
 
     time_to = timedelta(seconds=interval) - ts
-    print("trigger in:", time_to)
+    logger.info("trigger in:", time_to)

@@ -1,4 +1,5 @@
 import time
+import logging
 
 from dotenv import load_dotenv
 
@@ -11,17 +12,26 @@ import server_db as sdb
 load_dotenv()
 
 
-"""
-app loop flow:
-    1. open and read the options file (request_options.toml)
-    2. check last request datetime,  if it exists read it and calculate whether to trigger, create it if it doesn't and triggers the request
-    3. if triggered get upcoming odds data
-    4. flatten and format data
-    5. write odds data to database
-"""
+logger = logging.getLogger("odb")
+logger.setLevel(logging.INFO)
+
+formatter = logging.Formatter(
+    fmt="{asctime} - {name} - {levelname} - {message}",
+    style="{",
+)
+
+fh = logging.FileHandler("log.log")
+fh.setLevel(logging.INFO)
+fh.setFormatter(formatter)
+logger.addHandler(fh)
+
+ch = logging.StreamHandler()
+ch.setLevel(logging.INFO)
+ch.setFormatter(formatter)
+logger.addHandler(ch)
 
 
-MIN_WAIT_TIME = 60
+MIN_WAIT_TIME = 600
 
 
 def update_usage(options):
@@ -33,14 +43,14 @@ def update_sports(options: dict):
     r = oa.fetch_sports(options)
     df = od.df_from_sports(r)
     ir, ur = sdb.upsert_sports(df)
-    print(f"sports: inserted {ir} rows, updated {ur} rows")
+    logger.info(f"sports: inserted {ir} rows, updated {ur} rows")
 
 
 def update_odds(options: dict):
     r = oa.fetch_odds(options)
     df = od.flat_df_from_odds(r)
     ir, ur = sdb.upsert_odds(df)
-    print(f"odds: inserted {ir} rows, updated {ur} rows")
+    logger.info(f"odds: inserted {ir} rows, updated {ur} rows")
 
 
 def main():
