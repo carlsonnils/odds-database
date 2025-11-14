@@ -41,15 +41,38 @@ def update_usage(options):
 
 def update_sports(options: dict):
     r = oa.fetch_sports(options)
-    df = od.df_from_sports(r)
-    ir, ur = sdb.upsert_sports(df)
+    df = od.df_from_sports(r).rename({
+        "key": "sport_key",
+        "group": "sport_type",
+        "title": "league",
+        "active": "in_season",
+    })
+    ir, ur = sdb.upsert_table(
+        df,
+        "sports",
+        ["sport_key"],
+        ["in_season", "has_outrights"],
+    )
     logger.info(f"sports: inserted {ir} rows, updated {ur} rows")
 
 
 def update_odds(options: dict):
     r = oa.fetch_odds(options)
     df = od.flat_df_from_odds(r)
-    ir, ur = sdb.upsert_odds(df)
+    ir, ur = sdb.upsert_table(
+        df,
+        "odds_test",
+        [
+            "game_id",
+            "sport_key",
+            "book_key",
+            "last_update_book",
+            "market_key",
+            "last_update_market",
+            "team_name",
+        ],
+        ["price"],
+    )
     logger.info(f"odds: inserted {ir} rows, updated {ur} rows")
 
 

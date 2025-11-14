@@ -7,10 +7,18 @@ def flat_df_from_odds(res: httpx.Response) -> pl.DataFrame:
         pl.from_dicts(res.json())
         .explode("bookmakers")
         .unnest("bookmakers")
-        .rename({"key": "book_key", "last_update": "last_update_book"})
+        .rename(
+            {
+                "key": "book_key", 
+                "last_update": "last_update_book",
+                "link": "book_link",
+                "sid": "book_sid",
+            }
+        )
         .explode("markets")
         .unnest("markets")
         .explode("outcomes")
+        .rename({"link": "outcome_link", "sid": "outcome_sid"})
         .unnest("outcomes")
         .rename(
             {
