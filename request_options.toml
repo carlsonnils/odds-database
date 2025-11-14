@@ -1,9 +1,9 @@
-last_request_time = "2025-11-04 10:16:47"
-update_interval_sec = 4544.270161290323
+last_request_time = "2025-11-13 22:26:00"
+update_interval_sec = 4206.2175226586105
 
 [usage]
-remaining = 493
-used = 7
+remaining = 329
+used = 171
 last = 0
 
 [sports]
