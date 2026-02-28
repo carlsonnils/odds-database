@@ -24,6 +24,7 @@ def load_options() -> dict:
 def write_options(options: dict):
     f = open(FILE_NAME, mode="w")
     toml.dump(options, f)
+    f.close()
 
 
 def check_time_since_trigger(options: dict, time_since: int = 60 * 10) -> bool:
