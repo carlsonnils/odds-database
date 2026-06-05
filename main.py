@@ -71,9 +71,9 @@ def main():
         load_dotenv()
 
         # create database connection
-        db_conn = pyodbc.connect(os.environ.get("ODDS_DATABASE_CONNSTR", ""))
-        if db_conn == "":
+        if os.environ.get("ODDS_DATABASE_CONNSTR", "") == "":
             sys.exit("Error: Database connection string not set")
+        db_conn = pyodbc.connect(os.environ.get("ODDS_DATABASE_CONNSTR", ""))
         
         # load Odds API request config
         cfg = config.load_config("request_options.toml")
