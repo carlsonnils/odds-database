@@ -1,10 +1,20 @@
-import httpx
 import polars as pl
+import httpx
 
 
-def flat_df_from_odds(res: httpx.Response) -> pl.DataFrame:
+def df_from_sports_response(response: httpx.Response) -> pl.DataFrame:
+    df = pl.from_dicts(response.json())
+    return df.rename({
+        "key": "sport_key",
+        "group": "sport_type",
+        "title": "league",
+        "active": "in_season",
+    })
+
+
+def df_from_odds_response(response: httpx.Response) -> pl.DataFrame:
     df = (
-        pl.from_dicts(res.json())
+        pl.from_dicts(response.json())
         .explode("bookmakers")
         .unnest("bookmakers")
         .rename(
@@ -36,8 +46,3 @@ def flat_df_from_odds(res: httpx.Response) -> pl.DataFrame:
     )
 
     return df
-
-
-def df_from_sports(res: httpx.Response) -> pl.DataFrame:
-    df = pl.from_dicts(res.json())
-    return df 

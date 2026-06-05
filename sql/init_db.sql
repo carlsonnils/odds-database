@@ -24,3 +24,10 @@ CREATE TABLE IF NOT EXISTS sports (
     in_season BOOL,
     has_outrights BOOL
 );
+
+CREATE TABLE IF NOT EXISTS responses (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    endpoint TEXT,
+    response MEDIUMBLOB,
+    time_received DATETIME DEFAULT CURRENT_TIMESTAMP
+);
