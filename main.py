@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 import os
+import sys
 import time
 
 from dotenv import load_dotenv
@@ -71,12 +72,16 @@ def main():
 
         # create database connection
         db_conn = pyodbc.connect(os.environ.get("ODDS_DATABASE_CONNSTR", ""))
+        if db_conn == "":
+            sys.exit("Error: Database connection string not set")
         
         # load Odds API request config
         cfg = config.load_config("request_options.toml")
 
         # check api usage
         odds_api_key = os.environ.get("ODDS_API_KEY", "")
+        if odds_api_key == "":
+            sys.exit("Error: Odds API Key not set")
 
         # check if should get odds data
         usage = odds_api.fetch_usage(odds_api_key)
@@ -86,7 +91,7 @@ def main():
 
         # check api usage
         usage = odds_api.fetch_usage(odds_api_key)
-        logger.info(usage)
+        logger.info(f"OddsAPI useage: {usage}")
 
         # wait before checking again
         wait_seconds = 120
