@@ -93,6 +93,9 @@ def main():
         usage = odds_api.fetch_usage(odds_api_key)
         logger.info(f"OddsAPI useage: {usage}")
 
+        # close database connection
+        db_conn.close()
+
         # wait before checking again
         wait_seconds = 120
         logger.info(f"Running again in {timedelta(seconds=wait_seconds)}\n")
